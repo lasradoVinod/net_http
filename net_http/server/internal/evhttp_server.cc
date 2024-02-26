@@ -238,6 +238,8 @@ bool EvHTTPServer::StartAcceptingRequests() {
     ResolveEphemeralPort(ev_listener_, &port_);
   }
 
+  accepting_requests_.Notify();
+  
   IncOps();
   server_options_->executor()->Schedule([this]() {
     NET_LOG(INFO, "Entering the event loop ...");
@@ -246,8 +248,6 @@ bool EvHTTPServer::StartAcceptingRequests() {
 
     DecOps();
   });
-
-  accepting_requests_.Notify();
 
   return true;
 }
